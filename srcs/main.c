@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturny <csturny@student.42.fr>            +#+  +:+       +#+        */
+/*   By: csu-ubuntu <csu-ubuntu@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:19:24 by csturny           #+#    #+#             */
-/*   Updated: 2025/03/14 10:05:11 by csturny          ###   ########.fr       */
+/*   Updated: 2025/03/17 10:15:57 by csu-ubuntu       ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "fdf.h"
 
@@ -115,6 +115,9 @@ void initialize_display(t_display *display, t_map *map)
         }
     }
     //ft_printf("Transformed array allocated: %d rows, %d cols\n", map->map_height, map->map_width);
+
+    // Initialize tile system (after all arrays are set up)
+    display->tiles = NULL;  // Initialize to NULL before calling init function
 }
 
 // attention j ai ajoutun teste
@@ -155,6 +158,9 @@ void	configure_default_display(t_display *display)
 	//ft_printf("je suis dans la fonction configure_default_display anvant get_max_int\n");
 	// Appel à la fonction de debug
 	//debug_display(display);
+
+    // Initialize the tile system
+    init_tile_system(display);
 }
 /*
 // fonction de debug a la fin mettre en commentaire et dans un fichier debug si necessaire

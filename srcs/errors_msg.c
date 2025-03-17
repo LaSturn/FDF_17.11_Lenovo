@@ -227,6 +227,10 @@ void free_all_struct_display(t_display *display)
         free(display->transformed);
         display->transformed = NULL; // Added
     }
+    
+    // Free the tile system
+    free_tile_system(display);
+    
     free(display);
     // Note: No need to set display to NULL here since it’s a local pointer
 }

@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csturny <csturny@student.42.fr>            +#+  +:+       +#+        */
+/*   By: csu-ubuntu <csu-ubuntu@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:19:39 by csturny           #+#    #+#             */
-/*   Updated: 2025/03/14 10:03:30 by csturny          ###   ########.fr       */
+/*   Updated: 2025/03/17 10:39:34 by csu-ubuntu       ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 
 
@@ -406,6 +406,16 @@ typedef struct s_imagedata
 } t_imagedata;
 
 
+// Structure for tile-based culling optimization
+typedef struct s_tile
+{
+    int start_x, start_y;     // Starting coordinates in the original map
+    int end_x, end_y;         // Ending coordinates
+    int visible;              // Visibility flag (0=invisible, 1=visible)
+    int min_z, max_z;         // Z-range for potential further optimization
+    int point_count;          // Number of points in this tile
+} t_tile;
+
 // structure representing the display parameters
 typedef struct s_display 
 {
@@ -429,7 +439,19 @@ typedef struct s_display
     int map_height; // Add this line
 	int use_altitude_colors; // 0 = default, 1 = altitude, 2 = rainbow pulse, 3 = rainbow shift
 	float color_time;        // Add for animation
+
+    // Tile-based culling fields
+    t_tile **tiles;           // 2D array of tiles
+    int tile_size;            // Size of tiles (points per tile)
+    int tiles_x;              // Number of tiles in x direction
+    int tiles_y;              // Number of tiles in y direction
+    int total_tiles;          // Total number of tiles
+    int visible_tiles;        // Number of visible tiles (for statistics)
 } t_display;
+
+/* ------------  TILE-BASED CULLING CONFIG  ---------------------------------- */
+# define DEFAULT_TILE_SIZE 64  // Default tile size (adjustable)
+# define VISIBILITY_MARGIN 50  // Extra margin around screen for smoother transitions
 
 /* ------ FONCTIONS ---------------*/
 
@@ -543,11 +565,12 @@ int update_color_time(void *param);
 // plus besoin int get_rainbow_shift_color(t_display *display, int z); // attention peut etre probleme avec fonction fmod?????
 int get_blue_gradient_color(t_display *display, int z); // Replace rainbow shift
 
-
-
-
-
-
+/*---- tile_culling.c ----*/
+void    init_tile_system(t_display *display);
+void    create_tiles(t_display *display);
+int     is_tile_visible(t_display *display, t_tile *tile);
+void    update_tile_visibility(t_display *display);
+void    free_tile_system(t_display *display);
 
 
 
